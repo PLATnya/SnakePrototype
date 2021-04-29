@@ -12,7 +12,7 @@ public class RoadManager : MonoBehaviour
     private float _roadLength;
     
 
-    [SerializeField]private ObjectPool _roadPool;
+    private ObjectPool _roadPool;
     private void Awake()
     {
         _roadPool = GetComponent<ObjectPool>();
