@@ -11,7 +11,7 @@ public class ObjectPool:MonoBehaviour
     public string tag;
     public GameObject objectExample;
 
-    private void Start()
+    private void Awake()
     {
         _poolList = new List<GameObject>();
     }
