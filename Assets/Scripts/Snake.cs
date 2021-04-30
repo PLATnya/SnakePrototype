@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,18 +18,38 @@ public class Snake : MonoBehaviour
         _cameraTransform = Camera.main.transform;
     }
 
-    
+    int WayByScreenInput()
+    {
+        if (Input.touchCount > 0)
+        {
+            Vector2 touchScreenPosition = Input.GetTouch(0).position;
+            if (touchScreenPosition.x > Screen.width / 2)
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
+        return 0;
+    }
     void Update()
     {
         if (_isAlive)
         {
+            
+            Vector3 speedVector = Vector3.forward;
+            speedVector+=Vector3.right*WayByScreenInput();
+            _controller.SimpleMove(speedVector*speed);
+            
             CameraFollowing();
         }
     }
 
     public void CameraFollowing()
     {
-        _controller.SimpleMove((Vector3.forward + Vector3.right * Input.GetAxis("Horizontal")) * speed);
         _cameraTransform.position = new Vector3(_cameraTransform.position.x,
             _selfTransform.position.y + cameraZYOffset.y, _selfTransform.position.z + cameraZYOffset.x);
         
