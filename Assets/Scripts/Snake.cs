@@ -9,8 +9,10 @@ public class Snake : MonoBehaviour
     private CharacterController _controller;
     private Transform _cameraTransform;
     private Transform _selfTransform;
+    
     public float speed;
     public Vector2 cameraZYOffset;
+    
     void Start()
     {
         _selfTransform = transform;
@@ -27,10 +29,8 @@ public class Snake : MonoBehaviour
             {
                 return 1;
             }
-            else
-            {
-                return -1;
-            }
+            return -1;
+            
         }
 
         return 0;
@@ -40,10 +40,9 @@ public class Snake : MonoBehaviour
         if (_isAlive)
         {
             
-            Vector3 speedVector = Vector3.forward;
-            speedVector+=Vector3.right*WayByScreenInput();
+            Vector3 speedVector = _selfTransform.forward;
+            _selfTransform.rotation = Quaternion.Lerp(_selfTransform.rotation, Quaternion.LookRotation(Vector3.right*WayByScreenInput()), Time.deltaTime*speed/1.5f);
             _controller.SimpleMove(speedVector*speed);
-            
             CameraFollowing();
         }
     }
