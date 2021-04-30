@@ -25,7 +25,6 @@ public class RoadTrigger : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log(other.gameObject.name);
         if (other.CompareTag("Player") || other.CompareTag("Tail"))
         {
             Renderer tailRender = other.GetComponent<Renderer>();

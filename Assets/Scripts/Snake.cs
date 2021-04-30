@@ -9,15 +9,24 @@ public class Snake : MonoBehaviour
     private CharacterController _controller;
     private Transform _cameraTransform;
     private Transform _selfTransform;
+
+    public List<Transform> tailObjects = new List<Transform>();
     
     public float speed;
+    public GameObject TailPrefab;
     public Vector2 cameraZYOffset;
-    
+    public float tailPartsOffset;
+    public Color snakeColor;
+
+    public bool isStucked;
     void Start()
     {
+        snakeColor = GetComponent<Renderer>().material.GetColor("Color_base");
         _selfTransform = transform;
         _controller = GetComponent<CharacterController>();
         _cameraTransform = Camera.main.transform;
+        tailObjects.Add(transform);
+        
     }
 
     int WayByScreenInput()
@@ -39,13 +48,19 @@ public class Snake : MonoBehaviour
     {
         if (_isAlive)
         {
-            
-            Vector3 speedVector = _selfTransform.forward;
-            _selfTransform.rotation = Quaternion.Lerp(_selfTransform.rotation, Quaternion.LookRotation(Vector3.right*WayByScreenInput()), Time.deltaTime*speed/1.5f);
-            _controller.SimpleMove(speedVector*speed);
+          
+            Vector3 direction = Vector3.right * (WayByScreenInput());
+            if (isStucked)
+            {
+                direction = Vector3.forward;
+            }
+            _selfTransform.rotation = Quaternion.Lerp(_selfTransform.rotation, Quaternion.LookRotation(direction), Time.deltaTime*speed/1.5f);
+            _controller.SimpleMove(_selfTransform.forward*speed);
             CameraFollowing();
+            TailFollowing();
         }
     }
+    
 
     public void CameraFollowing()
     {
@@ -53,4 +68,29 @@ public class Snake : MonoBehaviour
             _selfTransform.position.y + cameraZYOffset.y, _selfTransform.position.z + cameraZYOffset.x);
         
     }
+
+    void TailFollowing()
+    {
+        Transform lastTailPart = tailObjects[0];
+        for (int i = 1; i < tailObjects.Count; i++) 
+        {
+            
+            Transform currentTailTransform = tailObjects[i];
+            currentTailTransform.LookAt(lastTailPart);
+            Vector3 targetPosition = (lastTailPart.position - lastTailPart.forward * tailPartsOffset);
+            
+            Vector3 velocity = Vector3.zero;
+            currentTailTransform.position = Vector3.SmoothDamp(currentTailTransform.position, targetPosition, ref velocity, 0.015f);
+           
+            lastTailPart = currentTailTransform;
+            
+        }
+    }
+    public void AddTail()
+    {
+        Transform lastTailTransform = tailObjects[tailObjects.Count-1];
+        tailObjects.Add(Instantiate(TailPrefab,lastTailTransform.position-lastTailTransform.forward*tailPartsOffset,Quaternion.identity).transform);
+        
+    }
+
 }
