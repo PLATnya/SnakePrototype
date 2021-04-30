@@ -137,7 +137,7 @@
                 "m_Node": {
                     "m_Id": "ee58843fdb1d45df9667b0c7168c9498"
                 },
-                "m_SlotId": 1
+                "m_SlotId": 2
             }
         },
         {
@@ -165,7 +165,7 @@
                 "m_Node": {
                     "m_Id": "ee58843fdb1d45df9667b0c7168c9498"
                 },
-                "m_SlotId": 2
+                "m_SlotId": 1
             }
         },
         {
@@ -888,7 +888,7 @@
     },
     "m_Name": "Position",
     "m_DefaultReferenceName": "Vector3_7d14effd4c3a4d0ab5ca744b889ffaef",
-    "m_OverrideReferenceName": "",
+    "m_OverrideReferenceName": "Vector3_pos",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,

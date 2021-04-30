@@ -411,10 +411,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1695352675}
   - component: {fileID: 1695352674}
-  - component: {fileID: 1695352673}
   - component: {fileID: 1695352672}
   - component: {fileID: 1695352671}
   - component: {fileID: 1695352676}
+  - component: {fileID: 1695352673}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -510,7 +510,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1695352670}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.0611957, y: -5.92, z: 5.44}
+  m_LocalPosition: {x: 0.08, y: -6.94, z: 4.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -528,5 +528,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6db225e762326d4d9e1fbffddeac81a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  tailObjects: []
+  speed: 8
+  TailPrefab: {fileID: 6617876242170845856, guid: 7828b0d1dcebcc84d85b5c83b93308d1,
+    type: 3}
   cameraZYOffset: {x: -5, y: 8}
+  tailPartsOffset: 0.6
+  snakeColor: {r: 0, g: 0, b: 0, a: 0}

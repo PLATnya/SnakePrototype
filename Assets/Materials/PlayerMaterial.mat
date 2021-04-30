@@ -91,8 +91,9 @@ Material:
     - Color_4e7cf439088a4eed877b7c0f1bc5bd1a: {r: 0, g: 0, b: 0, a: 0}
     - Color_95308c8c07ac49c09445bc4d5ff46a92: {r: 0.1714282, g: 1, b: 0, a: 0}
     - Color_base: {r: 0, g: 0, b: 0, a: 0}
-    - Color_cover: {r: 0, g: 0, b: 0, a: 0}
+    - Color_cover: {r: 0.9811321, g: 0.040726196, b: 0.040726196, a: 0}
     - Vector3_7d14effd4c3a4d0ab5ca744b889ffaef: {r: -0.36, g: -8.01, b: 2.76, a: 0}
+    - Vector3_pos: {r: -0.18, g: 0, b: 100, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DamagesColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
