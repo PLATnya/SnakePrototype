@@ -28,7 +28,17 @@ public class Snake : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         _cameraTransform = Camera.main.transform;
         tailObjects.Add(transform);
-        
+        StandOnStart();
+    }
+
+    public void StandOnStart()
+    {
+        _controller.enabled = false;
+        Transform startRoad = GameManager.RoadManager.startRoad;
+        _selfTransform.position = startRoad.position + startRoad.forward * GameManager.RoadManager.roadLength / 2;
+        _selfTransform.rotation = Quaternion.identity;
+        _controller.enabled = true;
+        isAlive = true;
     }
 
     int WayByScreenInput()
@@ -97,6 +107,19 @@ public class Snake : MonoBehaviour
         Renderer tailPartRenderer = newTailPart.GetComponent<Renderer>();
         tailPartRenderer.material.SetColor("Color_base",snakeColor);
         tailPartRenderer.material.SetColor("Color_cover",snakeColor);
+    }
+
+    public void ClearTail()
+    {
+        Transform[] tail = tailObjects.ToArray();
+        foreach (Transform tailPart in tail)
+        {
+            if (tailPart != transform)
+            {
+                tailObjects.Remove(tailPart);
+                Destroy(tailPart.gameObject);
+            }
+        }
     }
 
 }
