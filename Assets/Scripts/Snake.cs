@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Snake : MonoBehaviour
 {
-    private bool _isAlive = true;
+    [HideInInspector]
+    public bool isAlive = true;
     private CharacterController _controller;
     private Transform _cameraTransform;
     private Transform _selfTransform;
@@ -46,7 +48,7 @@ public class Snake : MonoBehaviour
     }
     void Update()
     {
-        if (_isAlive)
+        if (isAlive)
         {
           
             Vector3 direction = Vector3.right * (WayByScreenInput());
@@ -54,7 +56,7 @@ public class Snake : MonoBehaviour
             {
                 direction = Vector3.forward;
             }
-            _selfTransform.rotation = Quaternion.Lerp(_selfTransform.rotation, Quaternion.LookRotation(direction), Time.deltaTime*speed/1.5f);
+            _selfTransform.rotation = Quaternion.Lerp(_selfTransform.rotation, Quaternion.LookRotation(direction), Time.deltaTime*speed/2f);
             _controller.SimpleMove(_selfTransform.forward*speed);
             CameraFollowing();
             TailFollowing();
@@ -89,8 +91,12 @@ public class Snake : MonoBehaviour
     public void AddTail()
     {
         Transform lastTailTransform = tailObjects[tailObjects.Count-1];
-        tailObjects.Add(Instantiate(TailPrefab,lastTailTransform.position-lastTailTransform.forward*tailPartsOffset,Quaternion.identity).transform);
-        
+        GameObject newTailPart = Instantiate(TailPrefab, lastTailTransform.position - lastTailTransform.forward * tailPartsOffset,
+            Quaternion.identity);
+        tailObjects.Add(newTailPart.transform);
+        Renderer tailPartRenderer = newTailPart.GetComponent<Renderer>();
+        tailPartRenderer.material.SetColor("Color_base",snakeColor);
+        tailPartRenderer.material.SetColor("Color_cover",snakeColor);
     }
 
 }
