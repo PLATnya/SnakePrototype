@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Obstacles : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class Obstacles : MonoBehaviour
     private ObjectPool _gemsPool;
     private ObjectPool _humansPool;
     private ObjectPool _spikesPool;
-
+    
     public void GenerateObstacles(Transform road, ScriptableObstacles scriptableObstacles)
     {
 
@@ -50,6 +51,7 @@ public class Obstacles : MonoBehaviour
                     break;
                 case ObstaclesEnum.Humans:
                     newObstacle = _humansPool.Generate();
+                    GenerateHumansColor(newObstacle.transform);
                     break;
 
             }
@@ -62,6 +64,15 @@ public class Obstacles : MonoBehaviour
                 newObstacleTransform.position = origin + road.right * chunkWidth * column + road.forward*chunkHeight*row;
                 
             }
+        }
+    }
+
+
+    public void GenerateHumansColor(Transform humans)
+    {
+        foreach (Renderer render in humans.GetComponentsInChildren<Renderer>())
+        {
+            render.material.color = GameManager.Colors[Random.Range(0, GameManager.Colors.Length)];
         }
     }
 }
