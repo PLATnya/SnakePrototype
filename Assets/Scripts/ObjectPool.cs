@@ -11,6 +11,11 @@ public class ObjectPool:MonoBehaviour
     public string tag;
     public GameObject objectExample;
 
+
+    public int ActivaPoolSize
+    {
+        get => _poolList.Count;
+    }
     private void Awake()
     {
         _poolList = new List<GameObject>();
@@ -34,11 +39,13 @@ public class ObjectPool:MonoBehaviour
         {
             GameObject newObject = GameObject.Instantiate(objectExample);
             _poolList.Add(newObject);
+            newObject.SetActive(true);
             return newObject;
         }
         GameObject tmp = _poolList[0];
         _poolList.Remove(tmp);
         _poolList.Add(tmp);
+        tmp.SetActive(true);
         return tmp;
     }
 }
