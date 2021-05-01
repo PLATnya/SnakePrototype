@@ -8,6 +8,8 @@ public class RoadTrigger : MonoBehaviour
 {
     public Color newColor;
 
+    [SerializeField]
+    private Renderer checkPoint;
     private void OnTriggerEnter(Collider other)
     {
         GameManager.SnakePlayer.snakeColor = newColor;
@@ -27,6 +29,7 @@ public class RoadTrigger : MonoBehaviour
     public void ReloadColor()
     {
         newColor = GameManager.Colors[Random.Range(0, GameManager.Colors.Length)];
+        checkPoint.material.color = newColor;
     }
     
     private void OnTriggerExit(Collider other)
