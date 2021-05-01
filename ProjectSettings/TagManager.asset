@@ -10,6 +10,8 @@ TagManager:
   - Gem
   - Humans
   - Spike
+  - Human
+  - Start
   layers:
   - Default
   - TransparentFX
