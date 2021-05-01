@@ -13,7 +13,7 @@ public class EatingTrigger : MonoBehaviour
             Destroy(other.gameObject);
         }else if (other.CompareTag("Spike"))
         {
-            GameManager.SnakePlayer.isAlive = false;
+            GameManager.Death();
         }else if (other.CompareTag("Human"))
         {
             if (other.GetComponent<Renderer>().material.color == GameManager.SnakePlayer.snakeColor)
@@ -23,7 +23,7 @@ public class EatingTrigger : MonoBehaviour
             }
             else
             {
-                GameManager.SnakePlayer.isAlive = false;
+                GameManager.Death();
             }
         }
     }

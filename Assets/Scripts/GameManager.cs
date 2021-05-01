@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -29,8 +31,22 @@ public static class GameManager
 
     public static void AddScore()
     {
-        Score++;
-        UIManager.SetScore(Score);
+        SnakePlayer.StartCoroutine(MakeNiceScore());
     }
 
+    static IEnumerator MakeNiceScore()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            Score++;
+            UIManager.SetScore(Score);
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    public static void Death()
+    {
+        UIManager.restartButton.gameObject.SetActive(true);
+        SnakePlayer.isAlive = false;
+    }
 }
