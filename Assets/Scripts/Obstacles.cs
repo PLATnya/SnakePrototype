@@ -51,7 +51,7 @@ public class Obstacles : MonoBehaviour
                     break;
                 case ObstaclesEnum.Humans:
                     newObstacle = _humansPool.Generate();
-                    GenerateHumansColor(newObstacle.transform);
+                    GenerateHumansColor(road.GetComponentInChildren<RoadTrigger>().newColor, newObstacle.transform);
                     break;
 
             }
@@ -68,11 +68,22 @@ public class Obstacles : MonoBehaviour
     }
 
 
-    public void GenerateHumansColor(Transform humans)
+    public void GenerateHumansColor(Color coolColor, Transform humans)
     {
+        Color newColor;
+        switch (Random.Range(0,3))
+        {
+            case 0:
+                newColor = coolColor;
+                break;
+            default:
+                newColor = GameManager.Colors[Random.Range(0, GameManager.Colors.Length)];
+                break;
+        }
+
         foreach (Renderer render in humans.GetComponentsInChildren<Renderer>())
         {
-            render.material.color = GameManager.Colors[Random.Range(0, GameManager.Colors.Length)];
+            render.material.color = newColor;
         }
     }
 }
