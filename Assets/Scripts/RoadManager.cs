@@ -59,8 +59,18 @@ public class RoadManager : MonoBehaviour
             road.GetComponentInChildren<RoadTrigger>().ReloadColor();
             GameManager.Obstacles.GenerateObstacles(road.transform,roadsObstacles[Random.Range(0,roadsObstacles.Length)]);
         }
+
+        MakeFinishTrigger(road);
     }
 
+    public GameObject finishTriggerPrefab;
+    void MakeFinishTrigger(Transform road)
+    {
+
+        Transform finishTransform =
+            Instantiate(finishTriggerPrefab, road.position + road.forward * roadLength, Quaternion.identity).transform;
+        
+    }
     public void ClearRoads()
     {
         GameObject[] roads = GameObject.FindGameObjectsWithTag("Road");
