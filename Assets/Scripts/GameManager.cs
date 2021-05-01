@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
-public static class GameManager
+public class GameManager:MonoBehaviour
 {
     public static Snake SnakePlayer;
     public static RoadManager RoadManager;
@@ -23,10 +23,11 @@ public static class GameManager
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void Initialization()
     {
-        SnakePlayer = Object.FindObjectOfType<Snake>();
-        RoadManager = Object.FindObjectOfType<RoadManager>();
-        Obstacles = Object.FindObjectOfType<Obstacles>();
-        UIManager = Object.FindObjectOfType<UIManager>();
+        SnakePlayer = FindObjectOfType<Snake>();
+        RoadManager = FindObjectOfType<RoadManager>();
+        Obstacles = FindObjectOfType<Obstacles>();
+        UIManager = FindObjectOfType<UIManager>();
+        
     }
 
     public static void AddScore()
@@ -48,5 +49,20 @@ public static class GameManager
     {
         UIManager.restartButton.gameObject.SetActive(true);
         SnakePlayer.isAlive = false;
+    }
+
+    public void Restart()
+    {
+        RoadManager.ClearRoads();
+
+        SnakePlayer.ClearTail();
+
+        SnakePlayer.StandOnStart();
+        RoadManager.MakeRoad(RoadManager.startRoad, 10);
+        
+        UIManager.restartButton.gameObject.SetActive(false);
+        Score = 0;
+        UIManager.SetScore(0);
+
     }
 }
