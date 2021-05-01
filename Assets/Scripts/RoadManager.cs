@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class RoadManager : MonoBehaviour
 {
@@ -18,14 +19,15 @@ public class RoadManager : MonoBehaviour
     
     
     private ObjectPool _roadPool;
-    
-    
+
+    private ScriptableObstacles[] roadsObstacles;
     private void Awake()
     {
         _roadPool = GetComponent<ObjectPool>();
         roadLength = roadPrefab.transform.GetChild(0).lossyScale.z;
         roadWidth = roadPrefab.transform.GetChild(0).lossyScale.x;
         roadHeight = roadPrefab.transform.GetChild(0).lossyScale.y;
+        roadsObstacles = Resources.LoadAll<ScriptableObstacles>("Scriptables/Roads");
     }
 
     public void InitCameraAbove()
@@ -52,7 +54,8 @@ public class RoadManager : MonoBehaviour
             GameObject newRoad = _roadPool.Generate();
             road = newRoad.transform;
             road.position = newPosition;
-            GameManager.Obstacles.GenerateObstacles(road.transform,Resources.Load<ScriptableObstacles>("Scriptables/Roads/First"));
+            road.GetComponentInChildren<RoadTrigger>().ReloadColor();
+            GameManager.Obstacles.GenerateObstacles(road.transform,roadsObstacles[Random.Range(0,roadsObstacles.Length)]);
         }
     }
 }

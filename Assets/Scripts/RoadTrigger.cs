@@ -23,6 +23,12 @@ public class RoadTrigger : MonoBehaviour
         }
     }
 
+    
+    public void ReloadColor()
+    {
+        newColor = GameManager.Colors[Random.Range(0, GameManager.Colors.Length)];
+    }
+    
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player") || other.CompareTag("Tail"))
