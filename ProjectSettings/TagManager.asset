@@ -7,6 +7,9 @@ TagManager:
   - Road
   - Tail
   - Border
+  - Gem
+  - Humans
+  - Spike
   layers:
   - Default
   - TransparentFX
