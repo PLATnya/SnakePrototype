@@ -16,6 +16,13 @@ public class Obstacles : MonoBehaviour
     private ObjectPool _gemsPool;
     private ObjectPool _humansPool;
     private ObjectPool _spikesPool;
+
+
+    public void ClearObstacles(Transform road)
+    {
+        Transform obstaclesRootTransform = road.Find("Obstacles Root");
+        if(obstaclesRootTransform) obstaclesRootTransform.DetachChildren();
+    }
     
     public void GenerateObstacles(Transform road, ScriptableObstacles scriptableObstacles)
     {
@@ -28,12 +35,16 @@ public class Obstacles : MonoBehaviour
         var right = road.right;
         Vector3 origin = road.position - right * GameManager.RoadManager.roadWidth / 2;
         origin += road.forward * chunkHeight / 2 + right * chunkWidth / 2 + road.up* GameManager.RoadManager.roadHeight/2;
-        
-        
-        GameObject obstaclesRoot = new GameObject("Obstacles Root");    
-        Transform obstaclesRootTransform = obstaclesRoot.transform;
-        obstaclesRootTransform.parent = road;
-        obstaclesRootTransform.localPosition = Vector3.zero;
+
+        Transform obstaclesRootTransform = road.Find("Obstacles Root");
+        if (!obstaclesRootTransform)
+        {
+            GameObject obstaclesRoot = new GameObject("Obstacles Root");
+            obstaclesRootTransform = obstaclesRoot.transform;
+            obstaclesRootTransform.parent = road;
+            obstaclesRootTransform.localPosition = Vector3.zero;
+        }
+
         for (int i = 0; i < scriptableObstacles.matrix.Length; ++i)
         {
             
