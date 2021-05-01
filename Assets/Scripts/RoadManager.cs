@@ -9,14 +9,23 @@ public class RoadManager : MonoBehaviour
     public GameObject roadPrefab;
     public float cameraXOffset;
     
-    private float _roadLength;
+    [HideInInspector]
+    public float roadLength;
+    [HideInInspector]
+    public float roadWidth;
+    [HideInInspector]
+    public float roadHeight;
+    
+    
     private ObjectPool _roadPool;
     
     
     private void Awake()
     {
         _roadPool = GetComponent<ObjectPool>();
-        _roadLength = roadPrefab.transform.GetChild(0).transform.lossyScale.z;
+        roadLength = roadPrefab.transform.GetChild(0).lossyScale.z;
+        roadWidth = roadPrefab.transform.GetChild(0).lossyScale.x;
+        roadHeight = roadPrefab.transform.GetChild(0).lossyScale.y;
     }
 
     public void InitCameraAbove()
@@ -39,12 +48,11 @@ public class RoadManager : MonoBehaviour
         Transform road = startRoad;
         for (int i = 0; i < elementsCount; i++)
         {
-            Vector3 newPosition = road.position + road.forward * _roadLength;
-
-
+            Vector3 newPosition = road.position + road.forward * roadLength;
             GameObject newRoad = _roadPool.Generate();
             road = newRoad.transform;
             road.position = newPosition;
+            GameManager.Obstacles.GenerateObstacles(road.transform,Resources.Load<ScriptableObstacles>("Scriptables/Roads/First"));
         }
     }
 }
