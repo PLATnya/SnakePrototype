@@ -17,32 +17,34 @@ public class RoadManager : MonoBehaviour
     [HideInInspector]
     public float roadHeight;
     
-    
-    private ObjectPool _roadPool;
+    [HideInInspector]
+    public ObjectPool roadPool;
 
     private ScriptableObstacles[] roadsObstacles;
+
+    public Transform startRoad;
     private void Awake()
     {
-        _roadPool = GetComponent<ObjectPool>();
+        roadPool = GetComponent<ObjectPool>();
         roadLength = roadPrefab.transform.GetChild(0).lossyScale.z;
         roadWidth = roadPrefab.transform.GetChild(0).lossyScale.x;
         roadHeight = roadPrefab.transform.GetChild(0).lossyScale.y;
         roadsObstacles = Resources.LoadAll<ScriptableObstacles>("Scriptables/Roads");
+        
     }
 
+    
     public void InitCameraAbove()
     {
         Transform cameraTransform = Camera.main.transform;
-        cameraTransform.position = new Vector3(_roadPool[0].transform.position.x + cameraXOffset,
+        cameraTransform.position = new Vector3(startRoad.position.x + cameraXOffset,
             cameraTransform.position.y, cameraTransform.position.z);
     }
     
     private void Start()
     {
-
-        _roadPool.TakeInPoolByTag();
         InitCameraAbove();
-        MakeRoad(_roadPool[0].transform,10);
+        MakeRoad(startRoad,10);
     }
 
     public void MakeRoad(Transform startRoad, int elementsCount)
@@ -51,11 +53,30 @@ public class RoadManager : MonoBehaviour
         for (int i = 0; i < elementsCount; i++)
         {
             Vector3 newPosition = road.position + road.forward * roadLength;
-            GameObject newRoad = _roadPool.Generate();
+            GameObject newRoad = roadPool.Generate();
             road = newRoad.transform;
             road.position = newPosition;
             road.GetComponentInChildren<RoadTrigger>().ReloadColor();
             GameManager.Obstacles.GenerateObstacles(road.transform,roadsObstacles[Random.Range(0,roadsObstacles.Length)]);
+        }
+    }
+
+    public void ClearRoads()
+    {
+        GameObject[] roads = GameObject.FindGameObjectsWithTag("Road");
+         
+        foreach (GameObject road in roads)
+        {
+             
+            Transform rootTransform = road.transform.Find("Obstacles Root");
+            if (rootTransform)
+            {
+                for (int i = 0; i < rootTransform.childCount; ++i)
+                    rootTransform.GetChild(i).gameObject.SetActive(false);
+                rootTransform.DetachChildren();
+            }
+            road.SetActive(false);
+
         }
     }
 }
