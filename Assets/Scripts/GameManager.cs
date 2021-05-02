@@ -65,4 +65,9 @@ public class GameManager:MonoBehaviour
         UIManager.SetScore(0);
 
     }
+
+    public void QUit()
+    {
+        Application.Quit();
+    }
 }
