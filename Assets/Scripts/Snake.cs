@@ -64,11 +64,17 @@ public class Snake : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(inputRay, out hit))
                 {
-                    if (hit.point.z > _selfTransform.position.z)
+                    Vector3 directionVector = new Vector3(hit.point.x, _selfTransform.position.y, hit.point.z) -
+                                              _selfTransform.position;
+                    if (directionVector.magnitude > 0.2f)
                     {
-                        _direction = (new Vector3(hit.point.x, _selfTransform.position.y, hit.point.z) -
-                                     _selfTransform.position)
+                        _direction = (directionVector)
                             .normalized;
+
+                        if (hit.point.z <= _selfTransform.position.z)
+                        {
+                            _direction = new Vector3(_direction.x, _direction.y, -_direction.z);
+                        }
                     }
                 }
             }
