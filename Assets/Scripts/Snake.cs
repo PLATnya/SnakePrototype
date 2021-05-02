@@ -47,40 +47,40 @@ public class Snake : MonoBehaviour
         boost = false;
     }
 
-    int WayByScreenInput()
-    {
-        if (Input.touchCount > 0)
-        {
-            Vector2 touchScreenPosition = Input.GetTouch(0).position;
-            if (touchScreenPosition.x > Screen.width / 2)
-            {
-                return 1;
-            }
-            return -1;
-            
-        }
+    
 
-        return 0;
-    }
+    private Vector3 _direction = Vector3.forward;
     void FixedUpdate()
     {
         if (isAlive)
         {
-          
-            Vector3 direction = Vector3.right * (WayByScreenInput());
+            if (Input.touchCount > 0)
+            {
+                Ray inputRay = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                RaycastHit hit;
+                if (Physics.Raycast(inputRay, out hit))
+                {
+                    if (hit.point.z > _selfTransform.position.z)
+                    {
+                        _direction = (new Vector3(hit.point.x, _selfTransform.position.y, hit.point.z) -
+                                     _selfTransform.position)
+                            .normalized;
+                    }
+                }
+            }
             if (isStucked)
             {
-                direction = Vector3.forward;
+                _direction = Vector3.forward;
             }
 
             float allSpeed = speed;
             if (boost)
             {
-                direction = new Vector3(GameManager.RoadManager.startRoad.position.x,_selfTransform.position.y, _selfTransform.position.z + GameManager.RoadManager.startRoad.forward.z)
+                _direction = new Vector3(GameManager.RoadManager.startRoad.position.x,_selfTransform.position.y, _selfTransform.position.z + GameManager.RoadManager.startRoad.forward.z)
                     -_selfTransform.position;
                 allSpeed *= 3;
             }
-            _selfTransform.rotation = Quaternion.Lerp(_selfTransform.rotation, Quaternion.LookRotation(direction), 0.02f*speed/2f);
+            _selfTransform.rotation = Quaternion.Lerp(_selfTransform.rotation, Quaternion.LookRotation(_direction), 0.02f*speed/2f);
             _controller.SimpleMove(_selfTransform.forward*allSpeed);
             
             CameraFollowing();
@@ -109,6 +109,7 @@ public class Snake : MonoBehaviour
             Vector3 velocity = Vector3.zero;
             currentTailTransform.position = Vector3.SmoothDamp(currentTailTransform.position, targetPosition, ref velocity, 0.015f);
            
+            //monster.position += (player.position - monster.position).normalized * speed * Time.deltaTime
             lastTailPart = currentTailTransform;
             
         }
