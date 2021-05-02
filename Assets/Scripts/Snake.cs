@@ -40,7 +40,7 @@ public class Snake : MonoBehaviour
     {
         _controller.enabled = false;
         Transform startRoad = GameManager.RoadManager.startRoad;
-        _selfTransform.position = startRoad.position + startRoad.forward * GameManager.RoadManager.roadLength / 2;
+        _selfTransform.position = startRoad.position + startRoad.forward * GameManager.RoadManager.roadLength / 2 + Vector3.up;
         _selfTransform.rotation = Quaternion.identity;
         _controller.enabled = true;
         isAlive = true;
