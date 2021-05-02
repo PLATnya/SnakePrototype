@@ -11,6 +11,7 @@ public class Snake : MonoBehaviour
     private CharacterController _controller;
     private Transform _cameraTransform;
     private Transform _selfTransform;
+    private float MaxTailScale;
 
     public List<Transform> tailObjects = new List<Transform>();
     
@@ -31,6 +32,7 @@ public class Snake : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         _cameraTransform = Camera.main.transform;
         tailObjects.Add(transform);
+        MaxTailScale = TailPrefab.transform.lossyScale.x;
         StandOnStart();
     }
 
@@ -60,7 +62,7 @@ public class Snake : MonoBehaviour
 
         return 0;
     }
-    void Update()
+    void FixedUpdate()
     {
         if (isAlive)
         {
@@ -78,7 +80,7 @@ public class Snake : MonoBehaviour
                     -_selfTransform.position;
                 allSpeed *= 3;
             }
-            _selfTransform.rotation = Quaternion.Lerp(_selfTransform.rotation, Quaternion.LookRotation(direction), Time.deltaTime*speed/2f);
+            _selfTransform.rotation = Quaternion.Lerp(_selfTransform.rotation, Quaternion.LookRotation(direction), 0.02f*speed/2f);
             _controller.SimpleMove(_selfTransform.forward*allSpeed);
             
             CameraFollowing();
@@ -114,12 +116,21 @@ public class Snake : MonoBehaviour
     public void AddTail()
     {
         Transform lastTailTransform = tailObjects[tailObjects.Count-1];
-        GameObject newTailPart = Instantiate(TailPrefab, lastTailTransform.position - lastTailTransform.forward * tailPartsOffset,
-            Quaternion.identity);
-        tailObjects.Add(newTailPart.transform);
-        Renderer tailPartRenderer = newTailPart.GetComponent<Renderer>();
-        tailPartRenderer.material.SetColor("Color_base",snakeColor);
-        tailPartRenderer.material.SetColor("Color_cover",snakeColor);
+        if (tailObjects.Count > 1 && lastTailTransform.localScale.x < MaxTailScale)
+        {
+            lastTailTransform.localScale += new Vector3(0.1f, 0.1f, 0.1f);
+        }
+        else{
+            GameObject newTailPart = Instantiate(TailPrefab,
+                lastTailTransform.position - lastTailTransform.forward * tailPartsOffset,
+                Quaternion.identity);
+            Transform newTailPartTransform = newTailPart.transform;
+            newTailPartTransform.localScale = Vector3.zero;
+            tailObjects.Add(newTailPartTransform);
+            Renderer tailPartRenderer = newTailPart.GetComponent<Renderer>();
+            tailPartRenderer.material.SetColor("Color_base",snakeColor);
+            tailPartRenderer.material.SetColor("Color_cover",snakeColor);
+        }
     }
 
     public void ClearTail()
