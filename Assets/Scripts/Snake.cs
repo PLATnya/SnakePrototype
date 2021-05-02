@@ -20,7 +20,10 @@ public class Snake : MonoBehaviour
     public float tailPartsOffset;
     public Color snakeColor;
 
+    [HideInInspector]
     public bool isStucked;
+
+    [HideInInspector]public bool boost;
     void Start()
     {
         snakeColor = GetComponent<Renderer>().material.GetColor("Color_base");
@@ -39,6 +42,7 @@ public class Snake : MonoBehaviour
         _selfTransform.rotation = Quaternion.identity;
         _controller.enabled = true;
         isAlive = true;
+        boost = false;
     }
 
     int WayByScreenInput()
@@ -66,8 +70,17 @@ public class Snake : MonoBehaviour
             {
                 direction = Vector3.forward;
             }
+
+            float allSpeed = speed;
+            if (boost)
+            {
+                direction = new Vector3(GameManager.RoadManager.startRoad.position.x,_selfTransform.position.y, _selfTransform.position.z + GameManager.RoadManager.startRoad.forward.z)
+                    -_selfTransform.position;
+                allSpeed *= 3;
+            }
             _selfTransform.rotation = Quaternion.Lerp(_selfTransform.rotation, Quaternion.LookRotation(direction), Time.deltaTime*speed/2f);
-            _controller.SimpleMove(_selfTransform.forward*speed);
+            _controller.SimpleMove(_selfTransform.forward*allSpeed);
+            
             CameraFollowing();
             TailFollowing();
         }

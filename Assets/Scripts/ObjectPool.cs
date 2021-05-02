@@ -8,7 +8,7 @@ public class ObjectPool:MonoBehaviour
 {
     private List<GameObject> _poolList;
     public int poolSize;
-    public string tag;
+    public new string tag;
     public GameObject objectExample;
 
 
