@@ -57,6 +57,7 @@ public class Snake : MonoBehaviour
     {
         if (isAlive)
         {
+            _direction = Vector3.forward;
             if (Input.touchCount > 0)
             {
                 Ray inputRay = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
