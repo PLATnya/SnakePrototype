@@ -16,6 +16,8 @@ public class Snake : MonoBehaviour
     public List<Transform> tailObjects = new List<Transform>();
     
     public float speed;
+    public float rotationSpeed;
+    public float tailAddingScale = 0.2f;
     public GameObject TailPrefab;
     public Vector2 cameraZYOffset;
     public float tailPartsOffset;
@@ -24,6 +26,7 @@ public class Snake : MonoBehaviour
     [HideInInspector]
     public bool isStucked;
 
+    
     [HideInInspector]public bool boost;
     void Start()
     {
@@ -80,7 +83,8 @@ public class Snake : MonoBehaviour
                     -_selfTransform.position;
                 allSpeed *= 3;
             }
-            _selfTransform.rotation = Quaternion.Lerp(_selfTransform.rotation, Quaternion.LookRotation(_direction), 0.02f*speed/2f);
+            
+            _selfTransform.rotation = Quaternion.Lerp(_selfTransform.rotation, Quaternion.LookRotation(_direction), 0.02f*speed*rotationSpeed);
             _controller.SimpleMove(_selfTransform.forward*allSpeed);
             
             CameraFollowing();
@@ -119,9 +123,9 @@ public class Snake : MonoBehaviour
         Transform lastTailTransform = tailObjects[tailObjects.Count-1];
         if (tailObjects.Count > 1 && lastTailTransform.localScale.x < MaxTailScale)
         {
-            lastTailTransform.localScale += new Vector3(0.1f, 0.1f, 0.1f);
+            lastTailTransform.localScale += new Vector3(tailAddingScale, tailAddingScale, tailAddingScale);
         }
-        else{
+        else{   
             GameObject newTailPart = Instantiate(TailPrefab,
                 lastTailTransform.position - lastTailTransform.forward * tailPartsOffset,
                 Quaternion.identity);
